@@ -42,7 +42,7 @@ function poster(array $pelicula): string
         </div>
     </nav>
 
-    <main>
+    <main class="page-shell">
         <?php if ($mensaje): ?>
             <div class="toast-wrap">
                 <div class="alert alert-success alert-dismissible fade show shadow" role="alert">
@@ -53,11 +53,11 @@ function poster(array $pelicula): string
         <?php endif; ?>
 
         <?php if ($destacada): ?>
-            <section class="featured" style="--poster: url('<?= h(poster($destacada)) ?>')">
-                <div class="featured-content">
+            <section class="featured-panel">
+                <div class="featured-copy">
                     <span class="badge text-bg-danger mb-3">Destacada</span>
                     <h1><?= h($destacada['titulo']) ?></h1>
-                    <div class="featured-meta">
+                    <div class="meta-pills">
                         <span><?= (int) $destacada['anio'] ?></span>
                         <?php if ($destacada['duracion']): ?><span><?= h($destacada['duracion']) ?></span><?php endif; ?>
                         <span><?= number_format((float) $destacada['calificacion'], 1) ?>/10</span>
@@ -72,10 +72,11 @@ function poster(array $pelicula): string
                         </a>
                     </div>
                 </div>
+                <img class="featured-poster" src="<?= h(poster($destacada)) ?>" alt="Poster de <?= h($destacada['titulo']) ?>">
             </section>
         <?php else: ?>
-            <section class="featured empty-featured">
-                <div class="featured-content">
+            <section class="featured-panel">
+                <div class="featured-copy">
                     <h1>Aizen Movies</h1>
                     <a class="btn btn-light btn-lg" href="form.php"><i class="bi bi-plus-lg"></i> Agregar pelicula</a>
                 </div>
@@ -109,17 +110,59 @@ function poster(array $pelicula): string
             </div>
         </section>
 
+        <section class="records-section">
+            <div class="section-heading">
+                <h2>Administrar registros</h2>
+            </div>
+            <div class="table-responsive records-table">
+                <table class="table table-dark table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>Titulo</th>
+                            <th>Año</th>
+                            <th>Genero</th>
+                            <th>Director</th>
+                            <th>Calificacion</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($peliculas as $pelicula): ?>
+                            <tr>
+                                <td class="fw-bold"><?= h($pelicula['titulo']) ?></td>
+                                <td><?= (int) $pelicula['anio'] ?></td>
+                                <td><?= h($pelicula['genero']) ?></td>
+                                <td><?= h($pelicula['director'] ?: 'Sin dato') ?></td>
+                                <td><?= number_format((float) $pelicula['calificacion'], 1) ?></td>
+                                <td>
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <button class="btn btn-sm btn-light" type="button" data-bs-toggle="modal" data-bs-target="#movieModal<?= (int) $pelicula['id'] ?>">Ver</button>
+                                        <a class="btn btn-sm btn-outline-light" href="form.php?id=<?= (int) $pelicula['id'] ?>">Editar</a>
+                                        <form action="delete.php" method="post" onsubmit="return confirm('Eliminar esta pelicula?');">
+                                            <input type="hidden" name="id" value="<?= (int) $pelicula['id'] ?>">
+                                            <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
         <?php foreach ($peliculas as $pelicula): ?>
             <?php $modalId = 'movieModal' . (int) $pelicula['id']; ?>
             <div class="modal fade" id="<?= $modalId ?>" tabindex="-1" aria-labelledby="<?= $modalId ?>Label" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-xl">
                     <div class="modal-content movie-modal">
                         <div class="modal-body p-0">
-                            <div class="modal-hero" style="--poster: url('<?= h(poster($pelicula)) ?>')">
+                            <div class="modal-hero">
                                 <button type="button" class="btn-close btn-close-white modal-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                <img class="modal-poster-art" src="<?= h(poster($pelicula)) ?>" alt="Poster de <?= h($pelicula['titulo']) ?>">
                                 <div class="modal-copy">
                                     <h2 id="<?= $modalId ?>Label"><?= h($pelicula['titulo']) ?></h2>
-                                    <div class="featured-meta">
+                                    <div class="meta-pills">
                                         <span><?= (int) $pelicula['anio'] ?></span>
                                         <?php if ($pelicula['duracion']): ?><span><?= h($pelicula['duracion']) ?></span><?php endif; ?>
                                         <span><?= number_format((float) $pelicula['calificacion'], 1) ?>/10</span>
