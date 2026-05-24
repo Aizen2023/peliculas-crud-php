@@ -7,6 +7,7 @@ const DB_NAME = 'peliculas_crud';
 const DB_USER = 'root';
 const DB_PASS = '';
 const DB_CHARSET = 'utf8mb4';
+const OMDB_API_KEY = '';
 
 function db(?string $database = DB_NAME): PDO
 {
