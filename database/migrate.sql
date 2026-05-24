@@ -11,6 +11,15 @@ ALTER TABLE peliculas
   ADD COLUMN IF NOT EXISTS idioma VARCHAR(120) NULL AFTER pais,
   ADD COLUMN IF NOT EXISTS fuente_api VARCHAR(40) NULL AFTER idioma;
 
+DELETE p1 FROM peliculas p1
+INNER JOIN peliculas p2
+  ON p1.titulo = p2.titulo
+  AND p1.anio = p2.anio
+  AND p1.id > p2.id;
+
+ALTER TABLE peliculas
+  ADD UNIQUE KEY IF NOT EXISTS peliculas_titulo_anio_unique (titulo, anio);
+
 UPDATE peliculas
 SET
   duracion = COALESCE(duracion, '127 min'),

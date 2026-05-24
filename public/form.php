@@ -50,7 +50,7 @@ function h(?string $value): string
 <body>
     <nav class="navbar navbar-expand-lg app-nav">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="index.php">Cine CRUD</a>
+            <a class="navbar-brand fw-bold" href="index.php">Aizen Movies</a>
             <a class="btn btn-light btn-sm" href="index.php">Volver</a>
         </div>
     </nav>
@@ -60,7 +60,6 @@ function h(?string $value): string
             <div>
                 <span class="eyebrow"><?= $id ? 'Edicion' : 'Alta' ?></span>
                 <h1><?= $id ? 'Editar pelicula' : 'Nueva pelicula' ?></h1>
-                <p>Guarda informacion manualmente o intenta completarla desde OMDb si configuraste una API key.</p>
             </div>
         </section>
 
@@ -75,12 +74,12 @@ function h(?string $value): string
                     <input type="hidden" name="fuente_api" id="fuente_api" value="<?= h($pelicula['fuente_api']) ?>">
 
                     <div class="api-box mb-4">
-                        <label class="form-label" for="apiTitle">Buscar datos por titulo</label>
+                        <label class="form-label" for="apiTitle">Importar informacion</label>
                         <div class="input-group">
                             <input class="form-control" id="apiTitle" value="<?= h($pelicula['titulo']) ?>" placeholder="Ej. The Matrix">
-                            <button class="btn btn-accent" type="button" id="searchApi">Buscar API</button>
+                            <button class="btn btn-accent" type="button" id="searchApi">Buscar</button>
                         </div>
-                        <div class="form-text text-light-emphasis">Requiere configurar OMDB_API_KEY. Si no, captura los datos manualmente.</div>
+                        <div class="form-text text-light-emphasis">Sin OMDb usa Wikipedia como respaldo; revisa los datos antes de guardar.</div>
                         <div class="alert mt-3 d-none" id="apiMessage" role="alert"></div>
                     </div>
 
